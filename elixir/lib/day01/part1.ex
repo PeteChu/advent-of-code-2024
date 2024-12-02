@@ -1,27 +1,26 @@
 defmodule Day01.Part1 do
   def solve(input) do
-    x =
-      input
-      |> String.split("\n")
-      |> Enum.map(fn x ->
-        x
-        |> String.split(" ", trim: true)
-        |> Enum.map(fn x -> String.to_integer(x) end)
-      end)
-      |> Enum.filter(fn x -> length(x) > 0 end)
-
-    l = left_list(x) |> Enum.sort()
-    r = right_list(x) |> Enum.sort()
-
-    Enum.zip(l, r)
-    |> Enum.reduce(0, fn {l, r}, acc -> acc + abs(l - r) end)
+    input
+    |> String.split("\n", trim: true)
+    |> Stream.map(&parse_numbers/1)
+    |> Stream.reject(&Enum.empty?/1)
+    |> Enum.reduce({[], []}, &accumulate_ends/2)
+    |> calculate_distance
+    |> Enum.sum()
   end
 
-  defp left_list(input) do
-    input |> Enum.map(fn x -> List.first(x) end)
+  defp parse_numbers(line) do
+    line
+    |> String.split(" ", trim: true)
+    |> Enum.map(&String.to_integer/1)
   end
 
-  defp right_list(input) do
-    input |> Enum.map(fn x -> List.last(x) end)
+  defp accumulate_ends(numbers, {lefts, rights}) do
+    {[hd(numbers) | lefts], [List.last(numbers) | rights]}
+  end
+
+  defp calculate_distance({lefts, rights}) do
+    Enum.zip(Enum.sort(lefts), Enum.sort(rights))
+    |> Enum.map(fn {l, r} -> abs(l - r) end)
   end
 end
