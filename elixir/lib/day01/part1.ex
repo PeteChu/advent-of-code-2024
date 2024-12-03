@@ -9,7 +9,7 @@ defmodule Day01.Part1 do
     |> Enum.sum()
   end
 
-  defp parse_numbers(line) do
+  def parse_numbers(line) do
     line
     |> String.split(" ", trim: true)
     |> Enum.map(&String.to_integer/1)
