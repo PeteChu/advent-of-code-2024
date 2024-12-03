@@ -3,25 +3,21 @@ package part1
 import (
 	"regexp"
 	"strconv"
-	"strings"
 )
 
 // https://adventofcode.com/2024/day/3#part1
 func Solve(input string) int {
-	pattern := `mul\(\d+,\d+\)`
+	pattern := `mul\((\d+),(\d+)\)`
 	re := regexp.MustCompile(pattern)
-	instructions := re.FindAllString(input, -1)
-
-	re = regexp.MustCompile(`[mul\(|\)]`)
+	instructions := re.FindAllStringSubmatch(input, -1)
 
 	sum := 0
 	for _, v := range instructions {
-		o := strings.Split(
-			re.ReplaceAllString(v, ""),
-			",",
-		)
-		x, _ := strconv.Atoi(o[0])
-		y, _ := strconv.Atoi(o[1])
+		if len(v) != 3 {
+			continue
+		}
+		x, _ := strconv.Atoi(v[1])
+		y, _ := strconv.Atoi(v[2])
 
 		sum += x * y
 	}
