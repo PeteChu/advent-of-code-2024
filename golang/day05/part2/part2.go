@@ -19,15 +19,18 @@ func isOrdered(str []string, rules map[string]bool) bool {
 }
 
 func makeOrdered(str []string, rules map[string]bool) []string {
-	for i := 0; i < len(str)-1; i++ {
-		key := str[i] + "|" + str[i+1]
-		if _, ok := rules[key]; !ok {
-			str[i], str[i+1] = str[i+1], str[i]
+	n := len(str)
+	swapped := true
+	for swapped {
+		swapped = false
+		for i := 0; i < n-1; i++ {
+			key := str[i] + "|" + str[i+1]
+			if !rules[key] {
+				str[i], str[i+1] = str[i+1], str[i]
+				swapped = true
+			}
 		}
-	}
-
-	if !isOrdered(str, rules) {
-		return makeOrdered(str, rules)
+		n--
 	}
 	return str
 }
@@ -53,8 +56,9 @@ func Solve(input string) int {
 		}
 
 		n := makeOrdered(x, hashedRules)
-		y, _ := strconv.Atoi(n[len(n)/2])
-		sum += y
+		if mid, err := strconv.Atoi(n[len(n)/2]); err == nil {
+			sum += mid
+		}
 	}
 
 	return sum

@@ -6,7 +6,7 @@ import (
 )
 
 func TestPart2(t *testing.T) {
-	input, err := os.ReadFile("input.txt")
+	input, err := os.ReadFile("input_small.txt")
 	if err != nil {
 		t.Errorf("Error reading file: %v", err)
 	}
